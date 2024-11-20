@@ -1,13 +1,4 @@
-from ctypes import  c_double, c_float
-from functools import partial
-
-
-def _read_c_type(c_type, buffer, offset):
-	return c_type.from_buffer(buffer, offset).value
-
-
-_read_float = partial(_read_c_type, c_float)
-_read_double = partial(_read_c_type, c_double)
+from .core import _read_float, _read_double
 
 
 def _build_base_reader(data):
@@ -41,6 +32,11 @@ def _build_base_reader(data):
 		pos += 8
 		return ret
 
+	def read_pos():
+		return pos
+
 	buffer = memoryview(data)
 	pos = 0
-	return read_varint, read_bytes, read_float, read_double
+	return read_varint, read_bytes, read_float, read_double, read_pos
+
+
